@@ -1,6 +1,5 @@
 import React from 'react'
 import { useRouter } from '../hooks/useRouter'
-import { ROUTES } from '../context/RouterContext'
 import { useSearch } from '../hooks/useSearch'
 import { useContentSearch } from '../hooks/useContentSearch'
 
@@ -10,10 +9,10 @@ export const MainContent = () => {
   const { currentSearchTerm } = useSearch()
   const searchMatches = useContentSearch()
 
-  const [formattedContent, setFormattedContent] = React.useState([])
+  const [formattedContent, setFormattedContent] = React.useState<React.ReactNode[]>([])
 
   React.useEffect(() => {
-    const formatted: any = searchMatches.map((content) => {
+    const formatted = searchMatches.map((content) => {
       const split = content.split(currentSearchTerm)
 
       if (split.length > 1) {
@@ -35,8 +34,8 @@ export const MainContent = () => {
 
   return (
     <main>
-      {formattedContent?.map((entry) => {
-        return <p>{entry}</p>
+      {formattedContent?.map((entry, index) => {
+        return <p key={index}>{entry}</p>
       })}
     </main>
   )

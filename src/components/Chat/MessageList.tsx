@@ -1,4 +1,3 @@
-import React from 'react'
 import { useChat } from '../../hooks/useChat'
 import { UserMessage } from './UserMessage'
 import { AIMessage } from './AIMessage'
@@ -7,12 +6,12 @@ export const MessageList = () => {
   const { messages } = useChat()
 
   const renderMessages = () => {
-    return messages.map((message) => {
+    return messages.map((message, index) => {
       switch (message.type) {
         case 'user':
-          return <UserMessage text={message.text} />
+          return <UserMessage key={index} text={message.text} />
         case 'ai':
-          return <AIMessage text={message.text} />
+          return <AIMessage key={index} text={message.text} />
       }
     })
 

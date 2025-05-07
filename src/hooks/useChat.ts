@@ -8,13 +8,5 @@ export const useChat = () => {
     throw new Error('You are trying to use useRouter outside of its provider!')
   }
 
-  const {
-    messages,
-    addMessage
-  } = chatContext
-
-  return {
-    messages,
-    addMessage
-  }
+  return chatContext
 }

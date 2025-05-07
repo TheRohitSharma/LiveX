@@ -8,11 +8,17 @@ type Message = {
 type ChatContextType = {
   messages: Message[]
   addMessage: (message: Message[]) => void
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+  resetChat: () => void
 }
 
 export const ChatContext = React.createContext<ChatContextType>({
   messages: [],
-  addMessage: () => { }
+  addMessage: () => { },
+  setIsOpen: () => { },
+  isOpen: false,
+  resetChat: () => { }
 })
 
 type ChatContextProps = {
@@ -21,6 +27,7 @@ type ChatContextProps = {
 
 export const ChatProvider = ({ children }: ChatContextProps) => {
   const [messages, setMessages] = React.useState<Message[]>([])
+  const [isOpen, setIsOpen] = React.useState(false)
 
   const addMessage = (message: Message[]) => {
     setMessages((prevMessages) => {
@@ -28,10 +35,17 @@ export const ChatProvider = ({ children }: ChatContextProps) => {
     })
   }
 
+  const resetChat = () => {
+    setMessages([])
+  }
+
   return (
     <ChatContext.Provider value={{
       addMessage,
-      messages
+      messages,
+      setIsOpen,
+      isOpen,
+      resetChat
     }}>
       {children}
     </ChatContext.Provider>
