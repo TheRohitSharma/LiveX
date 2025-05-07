@@ -1,25 +1,44 @@
 import React from 'react'
 import { useRouter } from '../hooks/useRouter'
 import { ROUTES } from '../context/RouterContext'
-import { Apps } from './Apps'
-import { Documents } from './Documents'
+import { useSearch } from '../hooks/useSearch'
+import { useContentSearch } from '../hooks/useContentSearch'
+
 
 export const MainContent = () => {
-    const { currentRoute} = useRouter()
-    
-    const renderContent = () => {
-      switch (currentRoute) {
-        case ROUTES.APP:
-          return <Apps />
-        case ROUTES.DOCUMENTS:
-          return <Documents />
-      }
-    }
+  const { currentContent } = useRouter()
+  const { currentSearchTerm } = useSearch()
+  const searchMatches = useContentSearch()
 
-    return (
-      <main>
-        {renderContent()}
-      </main>
-    )
+  const [formattedContent, setFormattedContent] = React.useState([])
+
+  React.useEffect(() => {
+    const formatted: any = searchMatches.map((content) => {
+      const split = content.split(currentSearchTerm)
+
+      if (split.length > 1) {
+        return split.map((chunk, index) => {
+          if (index === split.length - 1) {
+            return chunk
+          }
+
+          return <>{chunk}<span className='bg-yellow-500'>{currentSearchTerm}</span></>
+        })
+      }
+
+      return content
+    })
+
+    setFormattedContent(formatted.length ? formatted : currentContent)
+  }, [currentSearchTerm, searchMatches])
+
+
+  return (
+    <main>
+      {formattedContent?.map((entry) => {
+        return <p>{entry}</p>
+      })}
+    </main>
+  )
 
 }
